@@ -49,10 +49,14 @@ public class MainWindow extends JFrame {
         buttonPanel.add(bruteForceButton);
         buttonPanel.add(saveFileButton);
 
+        JTextArea outputEditableTextArea = new JTextArea();
+        outputEditableTextArea.setEditable(false);
+
         inputTextArea = new JTextArea();
-        outputTextArea = new JTextArea();
+        outputTextArea = outputEditableTextArea;
+
         JScrollPane inputScrollPane = new JScrollPane(inputTextArea);
-        JScrollPane outputScrollPane = new JScrollPane(outputTextArea);
+        JScrollPane outputScrollPane = new JScrollPane(outputEditableTextArea);
 
         JPanel textPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         textPanel.add(inputScrollPane);
