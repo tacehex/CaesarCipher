@@ -1,5 +1,10 @@
 package com.caesar.ui;
 
+import com.caesar.ui.listeners.DecryptButtonListener;
+import com.caesar.ui.listeners.EncryptButtonListener;
+import com.caesar.ui.listeners.LoadFileButtonListener;
+import com.caesar.ui.listeners.SaveFileButtonListener;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -59,24 +64,11 @@ public class MainWindow extends JFrame {
      * Установка прослушиваний при нажатии на кнопки
      */
     private void setupListeners() {
-        loadFileButton.addActionListener(e -> {
-            System.out.println("Загрузка файла...");
-        });
+        loadFileButton.addActionListener(e -> new LoadFileButtonListener());
+        saveFileButton.addActionListener(e -> new SaveFileButtonListener());
 
-        decryptButton.addActionListener(e -> {
-            System.out.println("Текст для шифровки: " + inputTextArea.getText());
-        });
-
-        encryptButton.addActionListener(e -> {
-            System.out.println("Текст для расшифровки: " + inputTextArea.getText());
-        });
-
-        bruteForceButton.addActionListener(e -> {
-            System.out.println("метод bruteForce: " + inputTextArea.getText());
-        });
-
-        saveFileButton.addActionListener(e -> {
-            System.out.println("Сохранение файла...");
-        });
+        decryptButton.addActionListener(e -> new DecryptButtonListener(inputTextArea, outputTextArea));
+        encryptButton.addActionListener(e -> new EncryptButtonListener(inputTextArea, outputTextArea));
+        bruteForceButton.addActionListener(e -> new DecryptButtonListener(inputTextArea, outputTextArea));
     }
 }
