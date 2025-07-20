@@ -1,5 +1,7 @@
 package com.caesar.ui;
 
+import com.caesar.core.CaesarCipher;
+import com.caesar.core.FileHandler;
 import com.caesar.ui.listeners.DecryptButtonListener;
 import com.caesar.ui.listeners.EncryptButtonListener;
 import com.caesar.ui.listeners.LoadFileButtonListener;
@@ -64,11 +66,18 @@ public class MainWindow extends JFrame {
      * Установка прослушиваний при нажатии на кнопки
      */
     private void setupListeners() {
-        loadFileButton.addActionListener(e -> new LoadFileButtonListener());
-        saveFileButton.addActionListener(e -> new SaveFileButtonListener());
+        FileHandler handler = new FileHandler();
+        CaesarCipher cipher = new CaesarCipher();
 
-        decryptButton.addActionListener(e -> new DecryptButtonListener(inputTextArea, outputTextArea));
-        encryptButton.addActionListener(e -> new EncryptButtonListener(inputTextArea, outputTextArea));
-        bruteForceButton.addActionListener(e -> new DecryptButtonListener(inputTextArea, outputTextArea));
+        LoadFileButtonListener loadListener = new LoadFileButtonListener(inputTextArea, handler);
+        SaveFileButtonListener saveListener = new SaveFileButtonListener(outputTextArea, handler);
+        EncryptButtonListener encryptListener = new EncryptButtonListener(inputTextArea, outputTextArea, cipher);
+        DecryptButtonListener decryptListener = new DecryptButtonListener(inputTextArea, outputTextArea, cipher);
+
+        loadFileButton.addActionListener(loadListener);
+        saveFileButton.addActionListener(saveListener);
+        encryptButton.addActionListener(encryptListener);
+        decryptButton.addActionListener(decryptListener);
+        bruteForceButton.addActionListener(decryptListener); // Или создайте отдельный BruteForceListener
     }
 }
