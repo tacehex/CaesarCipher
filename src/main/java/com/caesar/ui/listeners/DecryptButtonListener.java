@@ -19,9 +19,21 @@ public class DecryptButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Расшифровка текста...");
         String text = inputTextArea.getText();
 
-        // TODO: логика Caesar
+        if (text == null || text.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Текст для зашифровки оказался пустым.");
+            return;
+        }
+
+        String keyString = JOptionPane.showInputDialog("Введите числовое значения ключа:");
+
+        try {
+            int keyInt = Integer.parseInt(keyString);
+            String decryptText = cipher.decrypt(text, keyInt);
+            outputTextArea.setText(decryptText);
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Ошибка: ключ должен быть числом!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+        }
     }
 }

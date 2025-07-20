@@ -78,6 +78,6 @@ public class MainWindow extends JFrame {
         saveFileButton.addActionListener(saveListener);
         encryptButton.addActionListener(encryptListener);
         decryptButton.addActionListener(decryptListener);
-        bruteForceButton.addActionListener(decryptListener); // Или создайте отдельный BruteForceListener
+        bruteForceButton.addActionListener(decryptListener);
     }
 }

@@ -30,7 +30,8 @@ public class EncryptButtonListener implements ActionListener {
 
         try {
             int keyInt = Integer.parseInt(keyString);
-            outputTextArea.setText(cipher.encrypt(text, keyInt));
+            String encryptText = cipher.encrypt(text, keyInt);
+            outputTextArea.setText(encryptText);
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(null, "Ошибка: ключ должен быть числом!", "Ошибка", JOptionPane.ERROR_MESSAGE);
         }
