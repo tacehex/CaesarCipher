@@ -1,6 +1,7 @@
 package com.caesar.ui.listeners;
 
 import com.caesar.core.CaesarCipher;
+import com.caesar.ui.handlers.MessageHandler;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -22,7 +23,7 @@ public class EncryptButtonListener implements ActionListener {
         String text = inputTextArea.getText();
 
         if (text == null || text.trim().isEmpty()) {
-            JOptionPane.showMessageDialog(null, "Текст для расшифровки оказался пустым.");
+            MessageHandler.showErrorDialog("Текст для расшифровки оказался пустым.");
             return;
         }
 
@@ -33,7 +34,7 @@ public class EncryptButtonListener implements ActionListener {
             String encryptText = cipher.encrypt(text, keyInt);
             outputTextArea.setText(encryptText);
         } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(null, "Ошибка: ключ должен быть числом!", "Ошибка", JOptionPane.ERROR_MESSAGE);
+            MessageHandler.showErrorDialog("Ошибка: ключ должен быть числом!");
         }
     }
 }

@@ -5,6 +5,9 @@ import com.caesar.core.FileHandler;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
+import static com.caesar.ui.handlers.MessageHandler.showErrorDialog;
 
 public class LoadFileButtonListener implements ActionListener {
     private final JTextArea inputTextArea;
@@ -17,8 +20,22 @@ public class LoadFileButtonListener implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Загрузка файла...");
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setFileFilter(FileHandler.getTextFileFilter());
 
-        // TODO: логика загрузки файла...
+        int returnValue = fileChooser.showOpenDialog(null);
+
+        if (returnValue == JFileChooser.APPROVE_OPTION) {
+            try {
+                String content = handler.readTextFile(fileChooser.getSelectedFile());
+                inputTextArea.setText(content);
+            } catch (SecurityException ex) {
+                showErrorDialog("Ошибка безопасности: " + ex.getMessage());
+            } catch (IOException ex) {
+                showErrorDialog("Ошибка при чтении файла: " + ex.getMessage());
+            } catch (Exception ex) {
+                showErrorDialog("Неожиданная ошибка: " + ex.getMessage());
+            }
+        }
     }
 }
