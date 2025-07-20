@@ -1,5 +1,7 @@
 package com.caesar.core;
 
+import com.caesar.ui.handlers.MessageHandler;
+
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +33,18 @@ public class FileHandler {
         return content;
     }
 
-    public void writeFile(String filePath, String content) throws IOException {
-        Files.write(Paths.get(filePath), content.getBytes());
+    public void saveTextFile(File file, String content) throws IOException {
+        if (file.exists() && !file.canWrite()) {
+            throw new IOException("Нет прав на запись в файл");
+        }
+
+        if (file.exists()) {
+            if (!MessageHandler.confirmFileOverwrite()) {
+                throw new IOException("Сохранение отменено");
+            }
+        }
+
+        Files.writeString(file.toPath(), content);
     }
 
     public static FileNameExtensionFilter getTextFileFilter() {
