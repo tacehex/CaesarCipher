@@ -73,7 +73,7 @@ public class MainWindow extends JFrame {
         FileHandler handler = new FileHandler();
         CaesarCipher cipher = new CaesarCipher();
 
-        LoadFileButtonListener loadListener = new LoadFileButtonListener(inputTextArea, handler);
+        LoadFileButtonListener loadListener = new LoadFileButtonListener(inputTextArea, outputTextArea, handler);
         SaveFileButtonListener saveListener = new SaveFileButtonListener(outputTextArea, handler);
         EncryptButtonListener encryptListener = new EncryptButtonListener(inputTextArea, outputTextArea, cipher);
         DecryptButtonListener decryptListener = new DecryptButtonListener(inputTextArea, outputTextArea, cipher);

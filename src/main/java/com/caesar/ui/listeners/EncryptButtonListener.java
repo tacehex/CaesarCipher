@@ -23,7 +23,7 @@ public class EncryptButtonListener implements ActionListener {
         String text = inputTextArea.getText();
 
         if (text == null || text.trim().isEmpty()) {
-            MessageHandler.showErrorDialog("Текст для расшифровки оказался пустым.");
+            MessageHandler.showErrorDialog("Текст для зашифровки оказался пустым.");
             return;
         }
 

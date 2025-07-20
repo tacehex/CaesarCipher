@@ -11,10 +11,12 @@ import static com.caesar.ui.handlers.MessageHandler.showErrorDialog;
 
 public class LoadFileButtonListener implements ActionListener {
     private final JTextArea inputTextArea;
+    private final JTextArea outputTextArea;
     private final FileHandler handler;
 
-    public LoadFileButtonListener(JTextArea inputTextArea, FileHandler handler) {
+    public LoadFileButtonListener(JTextArea inputTextArea, JTextArea outputTextArea, FileHandler handler) {
         this.inputTextArea = inputTextArea;
+        this.outputTextArea = outputTextArea;
         this.handler = handler;
     }
 
@@ -28,6 +30,7 @@ public class LoadFileButtonListener implements ActionListener {
         if (returnValue == JFileChooser.APPROVE_OPTION) {
             try {
                 String content = handler.readTextFile(fileChooser.getSelectedFile());
+                outputTextArea.setText(null);
                 inputTextArea.setText(content);
             } catch (SecurityException ex) {
                 showErrorDialog("Ошибка безопасности: " + ex.getMessage());
