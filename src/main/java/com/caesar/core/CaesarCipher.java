@@ -8,18 +8,28 @@ import java.util.Set;
 
 public class CaesarCipher {
     public enum Language {
-        RUSSIAN("RUS"),
-        ENGLISH("ENG");
+        RUSSIAN("RUS", "Русские"),
+        ENGLISH("ENG", "Английские");
 
         private final String code;
+        private final String displayName;
 
-        Language(String code) {
+        Language(String code, String displayName) {
             this.code = code;
+            this.displayName = displayName;
+        }
+
+        public String getCode() {
+            return code;
+        }
+
+        public String getDisplayName() {
+            return displayName;
         }
 
         @Override
         public String toString() {
-            return code;
+            return displayName;
         }
     }
 
@@ -88,9 +98,8 @@ public class CaesarCipher {
             char c = Character.toLowerCase(text.charAt(i));
 
             if (!allowedChars.contains(c)) {
-                String errorMessage = currentLanguage == Language.RUSSIAN ?
-                        "Текст содержит недопустимые символы. Разрешены только русские буквы и знаки пунктуации." :
-                        "Текст содержит недопустимые символы. Разрешены только английские буквы и знаки пунктуации.";
+                String errorMessage = "Текст содержит недопустимые символы. Разрешены только "
+                        + currentLanguage.getDisplayName() + " символы и знаки пунктуации.";
 
                 MessageHandler.showErrorDialog(errorMessage);
 

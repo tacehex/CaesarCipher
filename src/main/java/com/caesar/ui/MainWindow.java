@@ -40,7 +40,7 @@ public class MainWindow extends JFrame {
         JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         languageComboBox = new JComboBox<>(CaesarCipher.Language.values());
         languageComboBox.setSelectedItem(CaesarCipher.Language.RUSSIAN);
-        headerPanel.add(new JLabel("Язык шифровки:"));
+        headerPanel.add(new JLabel("Символы шифровки:"));
         headerPanel.add(languageComboBox);
         topPanel.add(headerPanel, BorderLayout.NORTH);
 
