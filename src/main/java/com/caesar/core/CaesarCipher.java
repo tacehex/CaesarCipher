@@ -69,16 +69,17 @@ public class CaesarCipher {
 
         for (char c : text.toCharArray()) {
             int index = Arrays.binarySearch(currentAlphabet, c);
+
             if (index >= 0) {
                 int newIndex = (index + key) % currentAlphabet.length;
-                if (newIndex < 0) {
-                    newIndex += currentAlphabet.length;
-                }
+                if (newIndex < 0) newIndex += currentAlphabet.length;
+
                 result.append(currentAlphabet[newIndex]);
             } else {
                 result.append(c);
             }
         }
+
         return result.toString();
     }
 
