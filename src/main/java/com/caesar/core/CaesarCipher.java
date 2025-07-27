@@ -1,21 +1,55 @@
 package com.caesar.core;
 
+import com.caesar.ui.handlers.MessageHandler;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 public class CaesarCipher {
+    public enum Language {
+        RUSSIAN("RUS"),
+        ENGLISH("ENG");
+
+        private final String code;
+
+        Language(String code) {
+            this.code = code;
+        }
+
+        @Override
+        public String toString() {
+            return code;
+        }
+    }
+
     private static final char[] RUSSIAN_ALPHABET = {
             'а', 'б', 'в', 'г', 'д', 'е', 'ж', 'з', 'и', 'й', 'к', 'л', 'м', 'н', 'о', 'п',
             'р', 'с', 'т', 'у', 'ф', 'х', 'ц', 'ч', 'ш', 'щ', 'ъ', 'ы', 'ь', 'э', 'ю', 'я',
             '.', ',', '«', '»', '"', '\'', ':', '!', '?', ' '
     };
 
-    private static final Set<Character> ALLOWED_CHARS = new HashSet<>();
+    private static final char[] ENGLISH_ALPHABET = {
+            'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p',
+            'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+            '.', ',', '«', '»', '"', '\'', ':', '!', '?', ' '
+    };
 
-    static {
-        for (char c : RUSSIAN_ALPHABET) {
-            ALLOWED_CHARS.add(c);
+    private char[] currentAlphabet;
+    private Language currentLanguage;
+    private Set<Character> allowedChars;
+
+    public CaesarCipher(Language language) {
+        setLanguage(language);
+    }
+
+    public void setLanguage(Language language) {
+        this.currentLanguage = language;
+        this.currentAlphabet = language == Language.RUSSIAN ? RUSSIAN_ALPHABET : ENGLISH_ALPHABET;
+        this.allowedChars = new HashSet<>();
+
+        for (char c : currentAlphabet) {
+            allowedChars.add(c);
         }
     }
 
@@ -34,13 +68,13 @@ public class CaesarCipher {
         text = text.toLowerCase();
 
         for (char c : text.toCharArray()) {
-            int index = Arrays.binarySearch(RUSSIAN_ALPHABET, c);
+            int index = Arrays.binarySearch(currentAlphabet, c);
             if (index >= 0) {
-                int newIndex = (index + key) % RUSSIAN_ALPHABET.length;
+                int newIndex = (index + key) % currentAlphabet.length;
                 if (newIndex < 0) {
-                    newIndex += RUSSIAN_ALPHABET.length;
+                    newIndex += currentAlphabet.length;
                 }
-                result.append(RUSSIAN_ALPHABET[newIndex]);
+                result.append(currentAlphabet[newIndex]);
             } else {
                 result.append(c);
             }
@@ -48,19 +82,19 @@ public class CaesarCipher {
         return result.toString();
     }
 
-    /**
-     * Проверка текста на содержание только разрешённых символов
-     * @throws IllegalArgumentException если найден недопустимый символ
-     */
     private void validateText(String text) throws IllegalArgumentException {
         for (int i = 0; i < text.length(); i++) {
             char c = Character.toLowerCase(text.charAt(i));
 
-            if (!ALLOWED_CHARS.contains(c)) {
+            if (!allowedChars.contains(c)) {
+                String errorMessage = currentLanguage == Language.RUSSIAN ?
+                        "Текст содержит недопустимые символы. Разрешены только русские буквы и знаки пунктуации." :
+                        "Текст содержит недопустимые символы. Разрешены только английские буквы и знаки пунктуации.";
+
+                MessageHandler.showErrorDialog(errorMessage);
+
                 throw new IllegalArgumentException(
-                        String.format("Недопустимый символ '%c' в позиции %d. " +
-                                        "Разрешены только русские буквы и знаки пунктуации: %s",
-                                text.charAt(i), i, Arrays.toString(RUSSIAN_ALPHABET))
+                        String.format("Недопустимый символ '%c' в позиции %d", text.charAt(i), i)
                 );
             }
         }

@@ -18,6 +18,7 @@ public class MainWindow extends JFrame {
     private JButton bruteForceButton;
     private JButton loadFileButton;
     private JButton saveFileButton;
+    JComboBox<CaesarCipher.Language> languageComboBox;
 
 
     public MainWindow() {
@@ -34,9 +35,16 @@ public class MainWindow extends JFrame {
      * Инициализация UI заданными компонентами.
      */
     private void initUI() {
-        // Панель с кнопками
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        JPanel topPanel = new JPanel(new BorderLayout());
 
+        JPanel headerPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        languageComboBox = new JComboBox<>(CaesarCipher.Language.values());
+        languageComboBox.setSelectedItem(CaesarCipher.Language.RUSSIAN);
+        headerPanel.add(new JLabel("Язык шифровки:"));
+        headerPanel.add(languageComboBox);
+        topPanel.add(headerPanel, BorderLayout.NORTH);
+
+        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         encryptButton = new JButton("Зашифровать");
         decryptButton = new JButton("Расшифровать");
         bruteForceButton = new JButton("Brute Force");
@@ -48,21 +56,20 @@ public class MainWindow extends JFrame {
         buttonPanel.add(decryptButton);
         buttonPanel.add(bruteForceButton);
         buttonPanel.add(saveFileButton);
-
-        JTextArea outputEditableTextArea = new JTextArea();
-        outputEditableTextArea.setEditable(false);
+        topPanel.add(buttonPanel, BorderLayout.CENTER);
 
         inputTextArea = new JTextArea();
-        outputTextArea = outputEditableTextArea;
+        outputTextArea = new JTextArea();
+        outputTextArea.setEditable(false);
 
         JScrollPane inputScrollPane = new JScrollPane(inputTextArea);
-        JScrollPane outputScrollPane = new JScrollPane(outputEditableTextArea);
+        JScrollPane outputScrollPane = new JScrollPane(outputTextArea);
 
         JPanel textPanel = new JPanel(new GridLayout(1, 2, 10, 10));
         textPanel.add(inputScrollPane);
         textPanel.add(outputScrollPane);
 
-        add(buttonPanel, BorderLayout.NORTH);
+        add(topPanel, BorderLayout.NORTH);
         add(textPanel, BorderLayout.CENTER);
     }
 
@@ -71,7 +78,7 @@ public class MainWindow extends JFrame {
      */
     private void setupListeners() {
         FileHandler handler = new FileHandler();
-        CaesarCipher cipher = new CaesarCipher();
+        CaesarCipher cipher = new CaesarCipher(getSelectedLanguage());
 
         LoadFileButtonListener loadListener = new LoadFileButtonListener(inputTextArea, outputTextArea, handler);
         SaveFileButtonListener saveListener = new SaveFileButtonListener(outputTextArea, handler);
@@ -83,5 +90,11 @@ public class MainWindow extends JFrame {
         encryptButton.addActionListener(encryptListener);
         decryptButton.addActionListener(decryptListener);
         bruteForceButton.addActionListener(decryptListener);
+        languageComboBox.addActionListener(e -> cipher.setLanguage(getSelectedLanguage()));
+
+    }
+
+    private CaesarCipher.Language getSelectedLanguage() {
+        return (CaesarCipher.Language) languageComboBox.getSelectedItem();
     }
 }
