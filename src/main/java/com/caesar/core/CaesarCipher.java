@@ -2,9 +2,7 @@ package com.caesar.core;
 
 import com.caesar.ui.handlers.MessageHandler;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 public class CaesarCipher {
     public enum Language {
@@ -108,5 +106,54 @@ public class CaesarCipher {
                 );
             }
         }
+    }
+
+    /**
+     * Расшифровка методом BruteForce
+     * @param encryptedText расшифровываемый текст.
+     * @return Список результатов оценки метода BruteForce.
+     */
+    public List<BruteForceResult> bruteForce(String encryptedText) {
+        List<BruteForceResult> results = new ArrayList<>();
+
+        for (int key = 1; key < currentAlphabet.length; key++) {
+            String decrypted = processText(encryptedText, -key);
+            int score = calculateTextScore(decrypted);
+            results.add(new BruteForceResult(decrypted, key, score));
+        }
+
+        results.sort((a, b) -> Integer.compare(b.score, a.score));
+
+        return results;
+    }
+
+        public record BruteForceResult(String text, int key, int score) {
+    }
+
+    private int calculateTextScore(String text) {
+        int score = 0;
+
+        long spaceCount = text.chars().filter(c -> c == ' ').count();
+        score += (int) (spaceCount * 10);
+
+        String vowels = currentLanguage == Language.RUSSIAN ? "аеёиоуыэюя" : "aeiouy";
+        long vowelCount = text.toLowerCase().chars()
+                .filter(c -> vowels.indexOf(c) >= 0)
+                .count();
+        score += (int) (vowelCount * 3);
+
+        String commonChars = currentLanguage == Language.RUSSIAN ? "оае" : "eta";
+        long commonCount = text.toLowerCase().chars()
+                .filter(c -> commonChars.indexOf(c) >= 0)
+                .count();
+        score += (int) (commonCount * 2);
+
+        String punctuation = ".,!?;:\"'";
+
+        if (text.matches(".*[a-zA-Zа-яА-Я][" + punctuation + "][a-zA-Zа-яА-Я].*")) {
+            score -= 20;
+        }
+
+        return score;
     }
 }

@@ -2,10 +2,7 @@ package com.caesar.ui;
 
 import com.caesar.core.CaesarCipher;
 import com.caesar.core.FileHandler;
-import com.caesar.ui.listeners.DecryptButtonListener;
-import com.caesar.ui.listeners.EncryptButtonListener;
-import com.caesar.ui.listeners.LoadFileButtonListener;
-import com.caesar.ui.listeners.SaveFileButtonListener;
+import com.caesar.ui.listeners.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -84,13 +81,14 @@ public class MainWindow extends JFrame {
         SaveFileButtonListener saveListener = new SaveFileButtonListener(outputTextArea, handler);
         EncryptButtonListener encryptListener = new EncryptButtonListener(inputTextArea, outputTextArea, cipher);
         DecryptButtonListener decryptListener = new DecryptButtonListener(inputTextArea, outputTextArea, cipher);
+        BruteForceButtonListener bruteForceListener = new BruteForceButtonListener(inputTextArea, outputTextArea, cipher);
 
         loadFileButton.addActionListener(loadListener);
         saveFileButton.addActionListener(saveListener);
         encryptButton.addActionListener(encryptListener);
         decryptButton.addActionListener(decryptListener);
-        bruteForceButton.addActionListener(decryptListener);
-        languageComboBox.addActionListener(e -> cipher.setLanguage(getSelectedLanguage()));
+        bruteForceButton.addActionListener(bruteForceListener);
+        languageComboBox.addActionListener(_ -> cipher.setLanguage(getSelectedLanguage()));
 
     }
 
